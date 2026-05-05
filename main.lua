@@ -14,13 +14,13 @@ function love.load()
     -- 行索引：1-向下, 2-静止(Idle), 3-向左/右, 4-向上
     player.animations = {}
     for row = 1, 4 do
+        player.animations[row] = {}
         for col = 1, 3 do
             local quad = love.graphics.newQuad(
                 (col-1) * player.fw, (row-1) * player.fh,
                 player.fw, player.fh, sw, sh
             )
-            --table.insert(player.animations[(row-1)*3+col], quad)
-            player.animations[(row-1)*3+col] = quad
+            table.insert(player.animations[row], quad)
         end
     end
 
@@ -64,15 +64,10 @@ function love.update(dt)
 end
 
 function love.draw()
-    --local quad = player.animations[player.animRow][player.animFrame]
-    local row = player.animRow
-    local col = player.animFrame
-    local index = (row-1)*3+col
-    local quad = player.animations[index]
     -- 6. 绘图
     love.graphics.draw(
         player.sheet,
-        quad,
+        player.animations[player.animRow][player.animFrame],
         player.x, player.y,
         0,
         player.dirX, 1,    -- 通过 dirX 实现左右镜像
